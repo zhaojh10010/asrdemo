@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online ASR</title>
+</head>
+<body>
+<h1>Online ASR</h1>
+<div style="border: 1px solid gray;padding-bottom: 5px;padding-left: 5px;padding-right: 5px;padding-top: 5px;">
+<button onclick="startRecording()">Start Recording</button>
+<button onclick="stopRecording()">Stop Recording</button>
+
+<div style="margin-top: 20px;"><audio id="streamingFile" controls autoplay playsinline></audio></div>
+<h3>语音输入:</h3>
+<p id="result"></p>
+
+<h3>标点更正:</h3>
+<p id="mixed_result" style="margin-top: 20px"></p>
+</div>
+<!--<p id="mixed_result_file" style="margin-top: 20px"></p>-->
+
+<div style="border: 1px solid gray;padding-bottom: 5px;margin-top: 10px;padding-left: 5px;padding-right: 5px;">
+<h2>录音文件识别</h2>
+<input type="file" id="fileInput" onchange="loadAudioFile(event)">
+<div style="margin-top: 20px;"><audio id="audioFile" controls autoplay playsinline></audio></div>
+<h3>中英文(Paraformer):</h3>
+<p id="mixed_result_damo" style="margin-top: 20px"></p>
+<h3>中英文Paraformer+百度punc:</h3>
+<p id="mixed_result_damo_punc" style="margin-top: 20px"></p>
+</div>
+
+<script src="axios.min.js"></script>
+<script src="jquery.min.js"></script>
+<script src="RecordRTC.js"></script>
+<script src="run.js"></script>
+

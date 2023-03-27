@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>网页版文字转语音朗读功能</title>
+  <style>
+    article {margin: 0 auto;max-width: 800px;text-align: center;}
+    textarea {max-width: 600px;width:100%;text-align: left;}
+    button{border-radius: 3px;border: 1px solid #dddddd;height: 30px;width: 80px;cursor: pointer;}
+  </style>
+</head>
+
+<body>
+<article>
+  <h3 align="center">请在下面文本框中输入要朗读的文本：</h3>
+  <p>
+    <textarea id="texts" rows="15" class="_play">本网页版本语音合成播报支持Microsoft Edge等浏览器，不必连接网络。</textarea>
+  </p>
+  <p>
+    <label>选择播报语音：</label>
+    <select id="voiceSelect" onchange="play()"></select>
+  </p>
+  <button class="_search" onclick="play()">开始</button>
+  <button onclick="resume()">继续</button>
+  <button onclick="pause()">暂停</button>
+  <!-- <button onclick="cancel()">清除队列</button> -->
+  <button onclick="cls()">清空文本</button>
+</article>
+</body>
+<script>
+  var audio = new Audio();
+  var url = "https://fanyi.sogou.com/reventondc/synthesis?text=%E8%A6%81%E5%9C%A8%E7%BD%91%E9%A1%B5%E4%B8%8A%E8%B0%83%E7%94%A8Microsoft%E7%9A%84%E8%87%AA%E7%84%B6%E8%AF%AD%E9%9F%B3%E5%90%88%E6%88%90%E6%9C%8D%E5%8A%A1%EF%BC%88Natural+Text+to+Speech%EF%BC%89%EF%BC%8C%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8Microsoft+Azure%E7%9A%84Text+to+Speech+API%E3%80%82%E4%BB%A5%E4%B8%8B%E6%98%AF%E4%B8%80%E4%BA%9B%E6%AD%A5%E9%AA%A4%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%8C%87%E5%AF%BC%E4%BD%A0%E5%A6%82%E4%BD%95%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8%EF%BC%9A%E5%89%8D%E5%BE%80+Microsoft+Azure%E7%BD%91%E7%AB%99%E5%B9%B6%E7%99%BB%E5%BD%95%E3%80%82%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%B2%A1%E6%9C%89%E5%B8%90%E6%88%B7%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%B3%A8%E5%86%8C%E4%B8%80%E4%B8%AA%E5%85%8D%E8%B4%B9%E7%9A%84%E8%AF%95%E7%94%A8%E8%B4%A6%E6%88%B7%E3%80%82%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84Text+to+Speech%E8%B5%84%E6%BA%90%E3%80%82%E8%8E%B7%E5%8F%96%E4%BD%A0%E7%9A%84Azure%E8%AE%A2%E9%98%85%E5%AF%86%E9%92%A5%EF%BC%8C%E5%B9%B6%E7%A1%AE%E4%BF%9D%E4%B8%BAText+to+Speech%E8%B5%84%E6%BA%90%E5%90%AF%E7%94%A8%E8%AF%A5%E5%AF%86%E9%92%A5%E3%80%82%E5%9C%A8%E7%BD%91%E9%A1%B5%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%BF%85%E8%A6%81%E7%9A%84JavaScript%E4%BB%A3%E7%A0%81%EF%BC%8C%E4%BB%A5%E4%BE%BF%E8%83%BD%E5%A4%9F%E8%B0%83%E7%94%A8Text+to+Speech+API%E5%B9%B6%E5%B0%86%E6%96%87%E6%9C%AC%E8%BD%AC%E6%8D%A2%E4%B8%BA%E8%AF%AD%E9%9F%B3%E3%80%82%E9%85%8D%E7%BD%AEAPI%E8%AF%B7%E6%B1%82%EF%BC%8C%E4%BB%A5%E4%BE%BF%E4%BD%BF%E7%94%A8%E4%BD%A0%E7%9A%84Azure%E8%AE%A2%E9%98%85%E5%AF%86%E9%92%A5%E3%80%82%E8%B0%83%E7%94%A8API%EF%BC%8C%E5%B9%B6%E5%B0%86API%E5%93%8D%E5%BA%94%E8%A7%A3%E6%9E%90%E4%B8%BA%E9%9F%B3%E9%A2%91%E6%96%87%E4%BB%B6%E6%88%96%E6%B5%81%E3%80%82%E8%AF%B7%E6%B3%A8%E6%84%8F%EF%BC%8C%E4%BD%BF%E7%94%A8Text+to+Speech+API%E9%9C%80%E8%A6%81%E4%B8%80%E4%BA%9B%E7%BC%96%E7%A8%8B%E7%9F%A5%E8%AF%86%E5%92%8C%E6%8A%80%E8%83%BD%EF%BC%8C%E5%9B%A0%E6%AD%A4%E4%BD%A0%E5%8F%AF%E8%83%BD%E9%9C%80%E8%A6%81%E5%AF%BB%E6%B1%82%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E7%9A%84%E5%B8%AE%E5%8A%A9%EF%BC%8C%E4%BB%A5%E7%A1%AE%E4%BF%9D%E6%AD%A3%E7%A1%AE%E9%85%8D%E7%BD%AE%E5%92%8C%E8%B0%83%E7%94%A8API%E3%80%82" +
+          "&speed=1&lang=zh-CHS&from=translateweb&speaker=6"
+  url = 'https://tts.youdao.com/fanyivoice?word=%E8%A6%81%E5%9C%A8%E7%BD%91%E9%A1%B5%E4%B8%8A%E8%B0%83%E7%94%A8Microsoft%E7%9A%84%E8%87%AA%E7%84%B6%E8%AF%AD%E9%9F%B3%E5%90%88%E6%88%90%E6%9C%8D%E5%8A%A1%EF%BC%88Natural+Text+to+Speech%EF%BC%89%EF%BC%8C%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8Microsoft+Azure%E7%9A%84Text+to+Speech+API%E3%80%82%E4%BB%A5%E4%B8%8B%E6%98%AF%E4%B8%80%E4%BA%9B%E6%AD%A5%E9%AA%A4%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%8C%87%E5%AF%BC%E4%BD%A0%E5%A6%82%E4%BD%95%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8%EF%BC%9A%E5%89%8D%E5%BE%80+Microsoft+Azure%E7%BD%91%E7%AB%99%E5%B9%B6%E7%99%BB%E5%BD%95%E3%80%82%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%B2%A1%E6%9C%89%E5%B8%90%E6%88%B7%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%B3%A8%E5%86%8C%E4%B8%80%E4%B8%AA%E5%85%8D%E8%B4%B9%E7%9A%84%E8%AF%95%E7%94%A8%E8%B4%A6%E6%88%B7%E3%80%82%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84Text+to+Speech%E8%B5%84%E6%BA%90%E3%80%82%E8%8E%B7%E5%8F%96%E4%BD%A0%E7%9A%84Azure%E8%AE%A2%E9%98%85%E5%AF%86%E9%92%A5%EF%BC%8C%E5%B9%B6%E7%A1%AE%E4%BF%9D%E4%B8%BAText+to+Speech%E8%B5%84%E6%BA%90%E5%90%AF%E7%94%A8%E8%AF%A5%E5%AF%86%E9%92%A5%E3%80%82%E5%9C%A8%E7%BD%91%E9%A1%B5%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%BF%85%E8%A6%81%E7%9A%84JavaScript%E4%BB%A3%E7%A0%81%EF%BC%8C%E4%BB%A5%E4%BE%BF%E8%83%BD%E5%A4%9F%E8%B0%83%E7%94%A8Text+to+Speech+API%E5%B9%B6%E5%B0%86%E6%96%87%E6%9C%AC%E8%BD%AC%E6%8D%A2%E4%B8%BA%E8%AF%AD%E9%9F%B3%E3%80%82%E9%85%8D%E7%BD%AEAPI%E8%AF%B7%E6%B1%82%EF%BC%8C%E4%BB%A5%E4%BE%BF%E4%BD%BF%E7%94%A8%E4%BD%A0%E7%9A%84Azure%E8%AE%A2%E9%98%85%E5%AF%86%E9%92%A5%E3%80%82%E8%B0%83%E7%94%A8API%EF%BC%8C%E5%B9%B6%E5%B0%86API%E5%93%8D%E5%BA%94%E8%A7%A3%E6%9E%90%E4%B8%BA%E9%9F%B3%E9%A2%91%E6%96%87%E4%BB%B6%E6%88%96%E6%B5%81%E3%80%82%E8%AF%B7%E6%B3%A8%E6%84%8F%EF%BC%8C%E4%BD%BF%E7%94%A8Text+to+Speech+API%E9%9C%80%E8%A6%81%E4%B8%80%E4%BA%9B%E7%BC%96%E7%A8%8B%E7%9F%A5%E8%AF%86%E5%92%8C%E6%8A%80%E8%83%BD%EF%BC%8C%E5%9B%A0%E6%AD%A4%E4%BD%A0%E5%8F%AF%E8%83%BD%E9%9C%80%E8%A6%81%E5%AF%BB%E6%B1%82%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E7%9A%84%E5%B8%AE%E5%8A%A9%EF%BC%8C%E4%BB%A5%E7%A1%AE%E4%BF%9D%E6%AD%A3%E7%A1%AE%E9%85%8D%E7%BD%AE%E5%92%8C%E8%B0%83%E7%94%A8API%E3%80%82'
+           + '&le=zh&keyfrom=speaker-target'
+  audio.src = url;
+
+
+
+  // audio.play();
+
+
+
+
+  if(!('speechSynthesis' in window)) {
+    throw alert("对不起，您的浏览器不支持")
+  }
+
+  var _play = document.querySelector("._play"),
+          to_speak = window.speechSynthesis,
+          dataName, voiceSelect = document.querySelector("#voiceSelect"),
+          voices = [];
+
+  function play() {
+    myCheckFunc();//检查文本框是否为空
+    cancel(); //
+    to_speak = new SpeechSynthesisUtterance(_play.value);
+
+    //to_speak.rate = 1.4;// 设置播放语速，范围：0.1 - 10之间
+
+    var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+    for(i = 0; i < voices.length; i++) {
+      if(voices[i].name === selectedOption) {
+        to_speak.voice = voices[i];
+      }
+    }
+
+    window.speechSynthesis.speak(to_speak);
+
+  }
+
+  //暂停
+  function pause() {
+    myCheckFunc();//检查文本框是否为空
+    window.speechSynthesis.pause();
+  }
+  //继续播放
+  function resume() {
+    myCheckFunc();//检查文本框是否为空
+    window.speechSynthesis.resume(); //继续
+  }
+  //清除所有语音播报创建的队列
+  function cancel() {
+    window.speechSynthesis.cancel();
+  }
+  //清空文本框
+  function cls()  {
+    document.getElementById("texts").value=""; //清空文本框
+  }
+  //检查文本框是否为空
+  function myCheckFunc() {
+    let x;
+    x = document.getElementById("texts").value;
+    try {
+      if (x === "")
+        throw "文本框为空";
+
+    } catch (error) {
+      alert( "提示" + error);
+    }
+  }
+
+  //创建选择语言的select标签
+  function populateVoiceList() {
+    voices = speechSynthesis.getVoices();
+    for(i = 0; i < voices.length; i++) {
+      var option = document.createElement('option');
+      option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+
+      if(voices[i].default) {
+        option.textContent += ' -- DEFAULT';
+      }
+      option.setAttribute('data-lang', voices[i].lang);
+      option.setAttribute('data-name', voices[i].name);
+      voiceSelect.appendChild(option);
+    }
+  }
+
+  setTimeout(function() {
+    populateVoiceList();
+  }, 500) //
+</script>
+
+</html>
