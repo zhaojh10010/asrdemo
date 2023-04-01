@@ -1,11 +1,11 @@
-// const asrurl = "ws://100.66.162.34:36090";
-// const asrMixUrl = "http://100.66.162.34:36001" + '/paddlespeech/asr/talcs'
+// const asrurl = "ws://yourASRserver";
+// const asrMixUrl = "http://yourASRserver" + '/paddlespeech/asr/talcs'
 
-const puncurl = "http://100.66.162.34:36080"+'/paddlespeech/text';
+const puncurl = "http://yourASRserver"+'/paddlespeech/text';
 
-// const asrurl = "ws://100.66.162.34:37000";
-const asrurl = "wss://chat.dustme.top:37000";
-const asrMixUrl = "http://100.66.162.34:37000" + '/paddlespeech/asr/talcs'
+// const asrurl = "ws://yourASRserver";
+const asrurl = "wss://yourASRserver";
+const asrMixUrl = "http://yourASRserver" + '/paddlespeech/asr/talcs'
 
 // 创建WebSocket连接
 let ws;
