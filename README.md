@@ -4,7 +4,9 @@
 # Requirements
 使用docker安装对应的服务端环境
 [Paddle docker环境安装](https://www.paddlepaddle.org.cn/install/quick?docurl=/documentation/docs/zh/install/docker/linux-docker.html)
+
 [Modelscope环境安装](https://modelscope.cn/docs/%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85)
+
 > 两个镜像分别需要15G+ 和20G+的磁盘空间..加上容器本身至少需要70G+空间, 如果没有多余空间只有考虑按照教程自己配置环境
 
 docker容器参数示例
