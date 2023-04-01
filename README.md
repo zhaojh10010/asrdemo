@@ -1,7 +1,7 @@
 # asrdemo
 语音识别demo(后端使用modelscope的Paraformer识别语音, 百度飞浆paddle punctual补充标点)
 
-# Requirements
+## Requirements
 使用docker安装对应的服务端环境
 
 [Paddle docker环境安装](https://www.paddlepaddle.org.cn/install/quick?docurl=/documentation/docs/zh/install/docker/linux-docker.html)
@@ -22,7 +22,7 @@ docker run -itd --name paddle --gpus all -v $PWD:/mnt -p 36000:8080 -p 36100:890
 docker run -itd --name modelscope --gpus all -p 37000:9000 registry.cn-hangzhou.aliyuncs.com/modelscope-repo/modelscope:ubuntu20.04-cuda11.3.0-py37-torch1.11.0-tf1.15.5-1.4.1
 ```
 
-# 服务端启动脚本
+## 服务端启动脚本
 Modelscope的Paraformer模型比百度飞浆的效果更好, 所以优先建议使用Modelscope语音识别
 ### Modelscope服务启动
 1. 把`work.py`和`asr.sh`扔到根目录`/`里面
@@ -61,7 +61,7 @@ Modelscope的Paraformer模型比百度飞浆的效果更好, 所以优先建议�
   - `docker exec -d paddle sh -c "/punc.sh go"`
 
 
-# Model References
+## Model References
 [Modelscope](https://modelscope.cn/models/damo/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/summary)
 
 [Paddle](https://github.com/PaddlePaddle/PaddleSpeech/blob/develop/demos/streaming_asr_server/README_cn.md)
