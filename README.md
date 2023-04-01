@@ -38,7 +38,9 @@ Modelscope的Paraformer模型比百度飞浆的效果更好, 所以优先建议�
   - `pip install pydantic`
 4. 启动/停止服务, 默认端口`9000`
   - `/asr.sh go` or `/asr.sh stop` 来启动或停止服务
-5. 容器外启动
+5. 查看日志
+  - `tail -f /work.log`
+6. 容器外启动
   - `docker exec -d modelscope sh -c "/asr.sh go"`
 
 
@@ -53,7 +55,9 @@ Modelscope的Paraformer模型比百度飞浆的效果更好, 所以优先建议�
   - 将`port`修改为你映射的端口如`8080`
 4. 启动/停止服务
   - `/punc.sh go` or `/punc.sh stop` 来启动或停止服务
-5. 容器外启动
+5. 查看日志
+  - `tail -f /home/punc.log`
+6. 容器外启动
   - `docker exec -d paddle sh -c "/punc.sh go"`
 
 
